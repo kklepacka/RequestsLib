@@ -1,0 +1,10 @@
+<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">
+  <carrier>
+    <name>test</name>
+    <active>0</active>
+    <delay>
+      <language id="1">bla bla</language>
+      <language id="2">coucou</language>
+    </delay>
+  </carrier>
+</prestashop>

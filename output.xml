@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0.1 (Python 3.11.0 on win32)" generated="20230131 16:48:47.757" rpa="false" schemaversion="3">
+<suite id="s1" name="Prestashop" source="c:\Users\aandre\Desktop\DepotGit\request\prestashop.robot">
+<test id="s1-t1" name="POST and DELETE" line="10">
+<kw name="Get File" library="OperatingSystem">
+<var>${xml}</var>
+<arg>test.xml</arg>
+<doc>Returns the contents of a specified file.</doc>
+<msg timestamp="20230131 16:48:47.904" level="INFO" html="true">Getting file '&lt;a href="file://C:\Users\aandre\Desktop\DepotGit\request\test.xml"&gt;C:\Users\aandre\Desktop\DepotGit\request\test.xml&lt;/a&gt;'.</msg>
+<msg timestamp="20230131 16:48:47.906" level="INFO">${xml} = &lt;prestashop xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;carrier&gt;
+    &lt;name&gt;test&lt;/name&gt;
+    &lt;active&gt;0&lt;/active&gt;
+    &lt;delay&gt;
+      &lt;language id="1"&gt;bla bla&lt;/language&gt;
+      &lt;language id="2"&gt;coucou&lt;/la...</msg>
+<status status="PASS" starttime="20230131 16:48:47.904" endtime="20230131 16:48:47.907"/>
+</kw>
+<kw name="POST" library="RequestsLibrary">
+<var>${response}</var>
+<arg>url=https://sut-test-adrian.squashcloud.io/api/carriers?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T&amp;output_format=JSON</arg>
+<arg>data=${xml}</arg>
+<doc>Sends a POST request.</doc>
+<msg timestamp="20230131 16:48:48.028" level="INFO">POST Request : url=https://sut-test-adrian.squashcloud.io/api/carriers?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T&amp;output_format=JSON 
+ path_url=/api/carriers?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T&amp;output_format=JSON 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '248'} 
+ body=&lt;prestashop xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;carrier&gt;
+    &lt;name&gt;test&lt;/name&gt;
+    &lt;active&gt;0&lt;/active&gt;
+    &lt;delay&gt;
+      &lt;language id="1"&gt;bla bla&lt;/language&gt;
+      &lt;language id="2"&gt;coucou&lt;/language&gt;
+    &lt;/delay&gt;
+  &lt;/carrier&gt;
+&lt;/prestashop&gt;
+ 
+ </msg>
+<msg timestamp="20230131 16:48:48.029" level="INFO">POST Response : url=https://sut-test-adrian.squashcloud.io/api/carriers?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T&amp;output_format=JSON 
+ status=201, reason=Created 
+ headers={'Access-Time': '1675180128', 'Content-Length': '68', 'Content-Sha1': '11396272fff3d22f6625928d9e91da83d10f9437', 'Content-Type': 'application/json', 'Date': 'Tue, 31 Jan 2023 15:48:47 GMT', 'Execution-Time': '0.022', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def5020019e1b9939b8bc53f3b10e486450666d85af5b79f8e285a5469351316987d0bbd70e57a88704f953a00d19fe6443d54da01cbd22a84fd63354b5ff57bf3fb8df7583eb6a884dc5e7fa0ff873f8eb78d3661f828ca2525a49609898540c9e999c27ce2fea9c529736ddd93a298812d8e590006bc461e1a9a9a70552d92a6189618d90d0f36508bcf5a21e595a6760c68fccfcd5c96d35f0828ace6a53f603f498b66c1828672e7822373090d684d32bcda14c827473f1c1af1f611eda5aca97ea15fd15f6555e8ca828d3a837f493cd40eb134594085; expires=Mon, 20-Feb-2023 15:48:47 GMT; Max-Age=1727999; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} 
+ body={"carrier":{"id":"26","name":"test","position":4,"delay":"bla bla"}} 
+ </msg>
+<msg timestamp="20230131 16:48:48.030" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20230131 16:48:47.907" endtime="20230131 16:48:48.030"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.json()}[carrier][id]</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20230131 16:48:48.031" endtime="20230131 16:48:48.034"/>
+</kw>
+<kw name="DELETE" library="RequestsLibrary">
+<arg>url=https://sut-test-adrian.squashcloud.io/api/carriers/${response.json()}[carrier][id]?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T</arg>
+<doc>Sends a DELETE request.</doc>
+<msg timestamp="20230131 16:48:48.132" level="INFO">DELETE Request : url=https://sut-test-adrian.squashcloud.io/api/carriers/26?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T 
+ path_url=/api/carriers/26?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T 
+ headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg timestamp="20230131 16:48:48.132" level="INFO">DELETE Response : url=https://sut-test-adrian.squashcloud.io/api/carriers/26?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T 
+ status=200, reason=OK 
+ headers={'Access-Time': '1675180128', 'Content-Length': '0', 'Date': 'Tue, 31 Jan 2023 15:48:48 GMT', 'Execution-Time': '0.026', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def50200817f3c06b3679ce260ed08fff874a03d3f42e55a4a52df7d18f3018e2c152558781f6e3ccde7ee9c8c6c321a6e2a6ef4a8e75a29d9ce364a7093435f28d0d5d76444b21cdf61c61b0c2442215a94d7f1d5007dd7daf98eac5d4de8b40b8644dc996c289c78b7d0061b204157e81a018a7ed9074696f297ae2b192469adfd377d4dab9912a3e7ab162089c8120b8e3630785cd1e86a6c88434facc77229f6f228521265824b40b264cdfc321a9f50a64d44a72e9fc1dec79b346d8d235a3585068c62f161ef2f98e1406f340f697f3532b63c8c11fc; expires=Mon, 20-Feb-2023 15:48:48 GMT; Max-Age=1728000; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} 
+ body=None 
+ </msg>
+<status status="PASS" starttime="20230131 16:48:48.035" endtime="20230131 16:48:48.132"/>
+</kw>
+<status status="PASS" starttime="20230131 16:48:47.903" endtime="20230131 16:48:48.134"/>
+</test>
+<status status="PASS" starttime="20230131 16:48:47.762" endtime="20230131 16:48:48.137"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Prestashop">Prestashop</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
