@@ -1,0 +1,5 @@
+*.html/
+log.html/
+output.xml/
+report.xml/
+interactive_console_output.xml

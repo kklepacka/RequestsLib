@@ -5,7 +5,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 6.0.1 (Python 3.11.0 on win32)" name="Generator">
+<meta content="Robot Framework 4.0.3 (Python 3.11.0 on win32)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAqAAAAAAAAAAAAAAAAAAAALIAAAD/AAAA4AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAP8AAACxAAAAAAAAAKYAAAD/AAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/AAAA/wAAAKkAAAD6AAAAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN8AAAD/AAAA+gAAAMMAAAAAAAAAAgAAAGsAAABrAAAAawAAAGsAAABrAAAAawAAAGsAAABrAAAADAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAIsAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAANEAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAAAAAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAFAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAADwAAAB8AAAAAAAAAGAAAABcAAAAAAAAAH8AAABKAAAAAAAAAAAAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAADCAAAA/wAAACkAAADqAAAA4QAAAAAAAAD7AAAA/wAAALAAAAAGAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAIwAAAP4AAAD/AAAA/wAAAGAAAAAAAAAAAAAAAMkAAAD/AAAAigAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAAAAAAAIAAAAcAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAA2gAAAP8AAAD7AAAAywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN4AAAD/AAAAqwAAAP8AAACvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIAAAD/AAAAsgAAAAAAAAC5AAAA/wAAAMoAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMkAAAD/AAAAvAAAAAAAAAAAAAAAAAAAAKwAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAArQAAAAAAAAAAwAMAAIABAAAf+AAAP/wAAD/8AAAgBAAAP/wAAD/8AAA//AAAJIwAADHEAAA//AAAP/wAAB/4AACAAQAAwAMAAA==">
 <style media="all" type="text/css">
 /* Generic and misc styles */
@@ -319,9 +319,6 @@ th.stats-col-graph:hover {
     padding: 3px;
     cursor: default;
 }
-.element-header .label {
-    margin-right: 0.5em;
-}
 .name {
     font-weight: bold;
 }
@@ -591,10 +588,10 @@ function drawCallback(element, childElement, childrenNames) {
     }
 }
 function expandSuite(suite) {
-    if (suite.status == "FAIL")
-        expandFailed(suite);
-    else
+    if (suite.status == "PASS")
         expandElement(suite);
+    else
+        expandFailed(suite);
 }
 function expandElement(item, retryCount) {
     retryCount = typeof retryCount !== 'undefined' ? retryCount : 3;
@@ -969,7 +966,6 @@ window.model = (function () {
     }
     function Keyword(data) {
         var kw = createModelObject(data);
-        var flatTypes = ['RETURN', 'BREAK', 'CONTINUE'];
         kw.libname = data.libname;
         kw.fullName = (kw.libname ? kw.libname + '.' : '') + kw.name;
         kw.type = data.type;
@@ -1354,8 +1350,8 @@ window.testdata = function () {
     var _statistics = null;
     var LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FAIL', 'SKIP'];
     var STATUSES = ['FAIL', 'PASS', 'SKIP', 'NOT RUN'];
-    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'ITERATION', 'IF', 'ELSE IF', 'ELSE', 'RETURN',
-                         'TRY', 'EXCEPT', 'FINALLY', 'WHILE', 'CONTINUE', 'BREAK'];
+    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'VAR', 'IF', 'ELSE IF', 'ELSE'];
+    var MESSAGE_TYPE = 8;
     function addElement(elem) {
         if (!elem.id)
             elem.id = uniqueId();
@@ -1376,10 +1372,10 @@ window.testdata = function () {
                 elapsed];
     }
     function createMessage(element, strings) {
-        return model.Message(LEVELS[element[1]],
-                             util.timestamp(element[0]),
-                             strings.get(element[2]),
-                             strings.get(element[3]));
+        return model.Message(LEVELS[element[2]],
+                             util.timestamp(element[1]),
+                             strings.get(element[3]),
+                             strings.get(element[4]));
     }
     function parseStatus(stats) {
         return STATUSES[stats[0]];
@@ -1390,12 +1386,9 @@ window.testdata = function () {
         };
     }
     function createBodyItem(parent, element, strings, index) {
-        if (element.length < 5)
+        if (element[0] == MESSAGE_TYPE)
             return createMessage(element, strings);
-        var messages = util.filter(parent.children(), function (child) {
-            return child.type == 'message';
-        })
-        return createKeyword(parent, element, strings, index - messages.length);
+        return createKeyword(parent, element, strings, index);
     }
     function createKeyword(parent, element, strings, index) {
         var kw = model.Keyword({
@@ -1803,25 +1796,25 @@ function stopPropagation(event) {
 window.output = {};
 </script>
 <script type="text/javascript">
-window.output["suite"] = [1,2,3,0,[],[1,0,375],[],[[4,0,0,[],[1,141,231],[[0,5,6,0,7,8,9,0,[1,142,3],[[142,2,10],[144,2,11]]],[0,12,13,0,14,15,16,0,[1,145,123],[[266,2,17],[267,2,18],[268,2,19]]],[0,20,21,0,22,23,0,0,[1,269,3],[]],[0,24,13,0,25,26,0,0,[1,273,97],[[370,2,27],[370,2,28]]]]]],[],[1,1,0,0]];
+window.output["suite"] = [1,2,3,0,[],[1,0,691],[],[[4,0,0,[5],[1,141,547],[[0,6,7,0,8,9,10,0,[1,142,4],[[8,143,2,11]]],[0,12,13,0,14,15,16,0,[1,147,292],[[8,438,2,17],[8,438,2,18],[8,439,2,19]]],[0,20,13,0,21,22,0,0,[1,440,0],[]],[0,23,13,0,24,25,0,0,[1,441,244],[[8,685,2,26],[8,685,2,27]]],[0,20,13,0,21,22,0,0,[1,686,1],[]]]]],[],[1,1,0,0]];
 </script>
 <script type="text/javascript">
 window.output["strings"] = [];
 </script>
 <script type="text/javascript">
-window.output["strings"] = window.output["strings"].concat(["*","*Prestashop","*c:\\Users\\aandre\\Desktop\\DepotGit\\request\\prestashop.robot","eNqzSVTIKEpNs1VKy8xJtdLX13e20g8tTi0q1k9MzEspStV3SS3OLskvANIF+SXumSX6RamFpanFJfoFRUAysTgjv0CvKD8pv0TJjmIjbPQT7QCZFzRi","*POST and DELETE","*Get File","*OperatingSystem","*<p>Returns the contents of a specified file.\x3c/p>","*test.xml","*${xml}","*Getting file '<a href=\"file://C:\\Users\\aandre\\Desktop\\DepotGit\\request\\test.xml\">C:\\Users\\aandre\\Desktop\\DepotGit\\request\\test.xml\x3c/a>'.","eNp9jksOgjAQhveeomkMy1Z0VQiHGaEpjaWQMliM8e6W4eHOZGYx3//InN9z5z6sYpnDcgh6RBjbfmCJ+rGYnfWPireIQyFljFHEm+iDkblSSpLKM4PliVG+hhCsDhtZmYdOLwBT9XLLHRwOqNE+CV3I8LsPS6MdvA6yMgfeTGA0s03Fc3rj7oClpZZd/pe6UqrupzRbSAjxBfSiVrw=","*POST","*RequestsLibrary","*<p>Sends a POST request.\x3c/p>","*url=https://sut-test-adrian.squashcloud.io/api/carriers?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T&amp;output_format=JSON, data=${xml}","*${response}","eNqtkctOGzEUhvd5CiuLjISYcSctIheNEFSIq7iEQCU2kZk5zFhxbGMfM4Sq747thIRF1VUle+Hv/8/F59xc303JBF4cWCQj4owoGkRtR5Rahyl6nLLKcCYz++KYbUqhXJVxRZnmtGTGcDD2oLWzOSyL82l+9vDr5PZ0b/84P3q4GkxO88Hl7dnRyf3jxWR/2mMLPVYOtcPZszILhsX53fUV6RDNsJmF6v85bwOs8omK38m9BZMe1iAxGZFEL7FRMjWrn1vaz/qDLE92SXJYlqAxPZalqrisg7l+53qXVPAsGMLWE6QduhPATyUllMiVDHAOoFMm+CusNfRV00uQNTZB7/8YJH98c0+qWhY9gWNtfBN+uEqTt4WQdvQmuJwX3bAKv4m2bbP2e6ZMTfPhcEij2u3VOO4QEuLX81qTFZNsAQGEFYY3/QQbB/MNv0b0LRq2742lAsGWG7JigsnasRoIr4puHtt4Eoz4G7N8yv+K6seoUjl//h4U6dfqEXz9ZwTbwa1sHfIBboXotQ==","eNp9VNtu20YQfe9XEHqoXkRr7xcJRGG7qR3Xjh1LdYq+BLO7sxEbmWRIqrZg5N87dIuiQYGCWHA5Z+fMZc/w7nazLe5x6NpmwGJVHPp9tRvHblgtl8NhLEccxhJSX0NzMnw5wLCL+/aQTup2CV29jND3NfbDD0/Dx894rK62/O3Dh4v3l9q+4WcP79z9JXfX79+eXfzy28/3dvs9PHbr9jB2h/FjbvtHGKurze274rtiGGE8DJVgfFH0CEPbVOf0HjERuENIFKV6mZ/GiMNQbutHnK+KOTdWc8e4cPNFMT9vmxGbsbzG5tO4m3DzjX2zA/7qxaU3woqcs0xCZGOE9sIlj54ncDJxlr2S9t++22P3GhG6bl9HGOu2Wf5OWU5nfqQ0J2x7wEUheXEFTSGYkAXXK+VWyhYXN9vp4JtnjIfJ9Z8C2AkTYoLuhqehfKAiCZ0Ad0LQBGyw/wP7yXTaQdzhX7axPG/bz/Urx11PlwSbXduVwUvJczCOUTHJM5eoNcpIQK+1dLZKmDUTjHGPPHgvfXAhapll4AyVM0ozY0xyGrIO1meHgvZaGS81l9x4ZxMLIVmG2oJzlqnstQTGEvcZjVIyaZWA8RioteBUTkZKrYLOWduQZQ4uZaudxGCIQKWo0WZgOTsrKV6wLkljeHbCRRBaaFDeMO+804pFuiPvo7ARRUbwUQtvpUkpeQnCO8dFcqg9Y8yEqAxHDp4ey7QWyQsw3Hla1JvEsjSaUf1Zg+DkpMFYw6JxOcYck47eJKkzo0wgogHqk2EyK++CMZGT2ViB1gkhrWTEaKgcKUJMwFV0wiqqiEcOmWfDOSbQEMFbBK5zomW01khVElOSJDxL3DImxTBwqbRXzOl1gc9dTVdc3bTNgnRV/oSh/I+81sUNPJenn7DiVljq0broYNxVy3WR2keom+r/x3ldDKTNHtfFJY3/bbM/rosNPOKmHrG6hudJdr+Wd+0T9pjKs+O3wis+YBhIqHXE+Vca2NCmY/Uy+/v3MFu9zOo0W82EmS1mDbHSfkqFvrp2qKeJmK3UYpZwD0fCwh4KWrOvE9efrINdFg==","*${response} = &lt;Response [201]&gt;","*Log To Console","*BuiltIn","*<p>Logs the given message to the console.\x3c/p>","*${response.json()}[carrier][id]","*DELETE","*<p>Sends a DELETE request.\x3c/p>","*url=https://sut-test-adrian.squashcloud.io/api/carriers/${response.json()}[carrier][id]?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T","*DELETE Request : url=https://sut-test-adrian.squashcloud.io/api/carriers/26?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T \n path_url=/api/carriers/26?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T \n headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Length': '0'} \n body=None \n ","*DELETE Response : url=https://sut-test-adrian.squashcloud.io/api/carriers/26?ws_key=JT1IVWGQH57E1BVN8RH18LQIBGUZKR7T \n status=200, reason=OK \n headers={'Access-Time': '1675180128', 'Content-Length': '0', 'Date': 'Tue, 31 Jan 2023 15:48:48 GMT', 'Execution-Time': '0.026', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def50200817f3c06b3679ce260ed08fff874a03d3f42e55a4a52df7d18f3018e2c152558781f6e3ccde7ee9c8c6c321a6e2a6ef4a8e75a29d9ce364a7093435f28d0d5d76444b21cdf61c61b0c2442215a94d7f1d5007dd7daf98eac5d4de8b40b8644dc996c289c78b7d0061b204157e81a018a7ed9074696f297ae2b192469adfd377d4dab9912a3e7ab162089c8120b8e3630785cd1e86a6c88434facc77229f6f228521265824b40b264cdfc321a9f50a64d44a72e9fc1dec79b346d8d235a3585068c62f161ef2f98e1406f340f697f3532b63c8c11fc; expires=Mon, 20-Feb-2023 15:48:48 GMT; Max-Age=1728000; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} \n body=None \n "]);
+window.output["strings"] = window.output["strings"].concat(["*","*Squash","*c:\\Users\\aandre\\Desktop\\DepotGit\\RequestLibrary\\squash.robot","eNqzSVTIKEpNs1VKy8xJtdLX13e20g8tTi0q1k9MzEspStV3SS3OLskvANIF+SXumSX6QamFpanFJT6ZSUWJRZX6xYWlicUZekX5SfklSnbUMMVGP9EOAM7ZNmQ=","*POST and DELETE Request With Json","*post","*Create Dictionary","*BuiltIn","*<p>Creates and returns a dictionary based on the given <code>items\x3c/code>.\x3c/p>","*name=Request, url=https://github.com/AdrianANDRE/RobotTestCharacter.git","*${body}","*${body} = {'name': 'Request', 'url': '<a href=\"https://github.com/AdrianANDRE/RobotTestCharacter.git\">https://github.com/AdrianANDRE/RobotTestCharacter.git\x3c/a>'}","*POST","*RequestsLibrary","*<p>Sends a POST request.\x3c/p>","*${endpoint}, json=${body}","*${resp}","eNqtUcFOwzAMvfMVUS+VprURAyFU0YkxdkOAxtDECbmp1wTaJEvcSRvi30m2ITgjLk70/OznZz8+PC3YHNc9emIF611bSiLrC86h7pQu9vEahEBLoAXmft2DlxT4uXEN16qR1G6zDpyCuuKHdEYdB6u4CzTeQmTzGDLoyXRAyujMo9ug8+yEWSD5GqX/pZtEqMOv/EifA5hNGtSUFiy1W5KB6A5mPR/lo8v8NB2ydLJ3l820MLXSTSQ3O2WHrMZVlPvhxNSADyIwNVqjiNoRfEe0GbRqg8ccBdXsDnVDMuYvz37ji63FiIK1rRJ7A/zNh05RqA9jOrWD79Y34JVgL8s5wfL84viW6WewWpl6W1bpR6Khw6RgyfGSyZAlYZ8RuQImHa7K5PusjSLZV7kwHZ/UYct6cn87n/G5qQwtQu1UggNB6PLATMZ/KrviME4+0zDhF1I40TA=","eNq1k99P2zAQx9/5K6y89GFN8wMoEAhaacPGpNGqzQN7qi7JtTFN7GA7iArxv++cDA207WUSUn7Yd5+zv747L+arlC1RN1JoZBFrVRWXxjQ68jwoai6i7vsZ8hwbAyLHkX5oQZcGtRlJtfUE35am2rs1KA5F5vVu19QeNNxThHkVWNqzHxdaI2swXApXo3pEpdkB0wZMq+PQD4ZMIWgp4in9DRbkLBEKwuLnwRTyEt2pFEbJahCxgZBubm1DRiNtpKJRDU8ubDH2adjShgofoeIFLTYYsoENRmHcdN+gXQGapuJ5p8e7p30tM7Ms+dKyHTI/ZNeYsdAPD5l/FoVBdByyL99TCyZPDacDWta384WCbQ1vhVnrCg1pljveLfptlaxWN/Pbm1l8lJwdXk2S8fHJdDY5OzoNx1cnV6fB9fjUn02TYHbOFmDK+N8ZPmdfqVRzUe3tPnfu28O588YeSvdqtOCbTQ9dK6jfeWfJ7Y/edae1u1DSYG6d1hecs1oWGGeVzHcWShUIvUHlJiKXBRdbS+VlK3ZYDF6oWpks9vHzAWPO2pAMh3rK+XvhnaGleGGRIOwmgqR1EUt8aCmoR6gnO+MFsFLhJnZeG3TLTdlmo1zW3qSg3IjJ7WyZeEuZSZNS+LQEBblBNSLSufyvsAsPLnsZOy46rc49Chrr3lqDaKFaU8cJs9ZY9bmz3AYqjR1ToM4Vb14dTh+Z9x2+zvadsbtn7z2/cNt7rh/Sk7524Oh4fPTJ9yPf7yPWFRc7bWmbejKQks3vKRls5v7Mor3lH3ezvSDss/7h23RV6o76cmBf24k/AdWVkKw=","*${resp} = &lt;Response [201]&gt;","*Status Should Be","*<p>Fails if response status code is different than the expected.\x3c/p>","*201, ${resp}","*DELETE","*<p>Sends a DELETE request.\x3c/p>","*url=${endpoint}/${resp.json()}[id]","eNqtj8FKAzEQhu8+RW4LpdnYRUQWFqy6t+KhKMWTTJNxE9xN0mS2sBXf3WRb8QW8TJL//2b+zFO7aV9atsXDiJFYzcbQN5rIx1oIUIOx9VzvQUr0BFZiGQ8jRE2JL13ohDWdpn7iAwQDai/ONqdBgDciJEz0kGmRC4eR3ABknOURwxFDFKuKXTEPpN9z+n8N1AgqPZqv4jXpfN2hpaJmhZ9IJzacV46iKqu7clUsWbGed+StlU4Z22W4Oxm/ZAo/cuIfk62FWGTh0VmLMsdn8RPRc+jNES8epVS+QduRzv71PGNMPwjmBL9dDxCNZG+7LcHu5vZyNsV32mLv1NQ8O4vp/gPWdJL/","eNp1UU1v2zAMve9X6OZLVNnqBxYHAubW8tZhTYLFA7ojI7OxVlvyJLloMOy/T0p26A67EE98j+SjWMsvspXkK/rJGo+kJLMbRB/C5EvGoBu1KU/xAyiFUwCj8ML/nMH3AX24sO7AjD70YTjSEZyGbs/ONA0jg0kzF2VsgKRmKVCYgx0haGuoR/eCzrOCk3fEBwizFzy/WhCH4K0Ra0vurAloQuR7hC6Kxa/sDlSPNDHODllJMmOpSrkFicgH6yIa4ZXCAUUe4RzHOnyBQXfRSLYg2d+2tD1OmDrANA1anVyxH3H0SvXgPAbxrW3o+1RRp8qobPt5QXJOGtwTnvNLki9LXpTXnHx8aJNQvk46Lp20eXpvHRxGeGszZXcY4gb2WZ+aft7J3e5+s76vRX3T8KqpllUlb5rLZnldF1zeXjVFccuXlSxWZAuhF///9RX5FM+3McMxzXmkb1elmymt6M9uvNFPT2dR42D8h63l+vuZevSebp0NqBKZuOhhtB2K/WDVc/Y73mZvu2O8lsGI/wBC6MEO"]);
 </script>
 <script type="text/javascript">
-window.output["stats"] = [[{"elapsed":"00:00:00","fail":0,"label":"All Tests","pass":1,"skip":0}],[],[{"elapsed":"00:00:00","fail":0,"id":"s1","label":"Prestashop","name":"Prestashop","pass":1,"skip":0}]];
+window.output["stats"] = [[{"elapsed":"00:00:01","fail":0,"label":"All Tests","pass":1,"skip":0}],[{"elapsed":"00:00:01","fail":0,"label":"post","pass":1,"skip":0}],[{"elapsed":"00:00:01","fail":0,"id":"s1","label":"Squash","name":"Squash","pass":1,"skip":0}]];
 </script>
 <script type="text/javascript">
 window.output["errors"] = [];
 </script>
 <script type="text/javascript">
-window.output["baseMillis"] = 1675180127762;
+window.output["baseMillis"] = 1675329712155;
 </script>
 <script type="text/javascript">
-window.output["generated"] = 415;
+window.output["generated"] = 707;
 </script>
 <script type="text/javascript">
 window.output["expand_keywords"] = null;
@@ -2127,7 +2120,7 @@ function addExecutionLog(main) {
     <div class="element-header closed" onclick="toggleKeyword('${id}')">
       <div class="element-header-left" title="${type}  {{if name}}{{html fullName}}  {{/if}}[${status}]">
         <span class="elapsed" title="Elapsed time">${times.elapsedTime}</span>
-        <span class="label ${status.toLowerCase()}">${type}</span>
+        <span class="label keyword ${status.toLowerCase()}">${type}</span>
         <span>{{html assign}}</span>
         <span class="name"><span class="parent-name">{{html libname}}{{if libname}} . {{/if}}</span>{{html name}}</span>
         <span class="arg">{{html arguments}}</span>
@@ -2135,7 +2128,7 @@ function addExecutionLog(main) {
       <div class="element-header-right" onclick="stopPropagation(event)">
         <a class="expand" title="Expand all" href="javascript:expandAll('${id}')"></a>
         <a class="collapse" title="Collapse all" href="javascript:collapseAll('${id}')"></a>
-        <a class="link" title="Link to this item" href="#${id}" onclick="makeElementVisible('${id}')"></a>
+        <a class="link" title="Link to this keyword" href="#${id}" onclick="makeElementVisible('${id}')"></a>
       </div>
       <div class="element-header-toggle" title="Toggle visibility"></div>
     </div>
