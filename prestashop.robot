@@ -17,7 +17,7 @@ ${BASE_64_TOKEN}    SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6
 *** Test Cases ***
 POST and DELETE
     
-    ${xml}=    Get File    test.xml
+    ${xml}=    Get File    RequestsLib/test.xml
     ${header}=    Create Dictionary    Authorization=Basic ${BASE_64_TOKEN}    output_format=JSON
     ${response}=    POST    url=${endpoint}${URI}    headers=${header}    data=${xml}
     DELETE    url=${endpoint}${URI}${response.json()}[carrier][id]    headers=${header}
