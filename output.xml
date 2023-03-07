@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 4.0.3 (Python 3.11.0 on win32)" generated="20230202 11:38:30.087" rpa="false" schemaversion="2">
-<suite id="s1" name="Prestashop" source="c:\Users\aandre\Desktop\DepotGit\RequestLibrary\prestashop.robot">
-<test id="s1-t1" name="POST and DELETE">
+<robot generator="Robot 6.0.2 (Python 3.11.0 on win32)" generated="20230307 15:45:56.726" rpa="false" schemaversion="3">
+<suite id="s1" name="Prestashop" source="c:\Users\kklepacka\source\repos\RequestsLib\prestashop.robot">
+<test id="s1-t1" name="POST and DELETE" line="18">
 <kw name="Get File" library="OperatingSystem">
 <var>${xml}</var>
-<arg>./test.xml</arg>
+<arg>test.xml</arg>
 <doc>Returns the contents of a specified file.</doc>
-<msg timestamp="20230202 11:38:30.301" level="INFO" html="true">Getting file '&lt;a href="file://C:\Users\aandre\Desktop\DepotGit\RequestLibrary\test.xml"&gt;C:\Users\aandre\Desktop\DepotGit\RequestLibrary\test.xml&lt;/a&gt;'.</msg>
-<msg timestamp="20230202 11:38:30.303" level="INFO">${xml} = &lt;prestashop xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+<msg timestamp="20230307 15:45:57.178" level="INFO" html="true">Getting file '&lt;a href="file://C:\Users\kklepacka\source\repos\RequestsLib\test.xml"&gt;C:\Users\kklepacka\source\repos\RequestsLib\test.xml&lt;/a&gt;'.</msg>
+<msg timestamp="20230307 15:45:57.187" level="INFO">${xml} = &lt;prestashop xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
   &lt;carrier&gt;
     &lt;name&gt;test&lt;/name&gt;
     &lt;active&gt;0&lt;/active&gt;
     &lt;delay&gt;
       &lt;language id="1"&gt;bla bla&lt;/language&gt;
       &lt;language id="2"&gt;coucou&lt;/la...</msg>
-<status status="PASS" starttime="20230202 11:38:30.300" endtime="20230202 11:38:30.303"/>
+<status status="PASS" starttime="20230307 15:45:57.178" endtime="20230307 15:45:57.187"/>
 </kw>
 <kw name="Create Dictionary" library="BuiltIn">
 <var>${header}</var>
 <arg>Authorization=Basic ${BASE_64_TOKEN}</arg>
 <arg>output_format=JSON</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<msg timestamp="20230202 11:38:30.305" level="INFO">${header} = {'Authorization': 'Basic SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6', 'output_format': 'JSON'}</msg>
-<status status="PASS" starttime="20230202 11:38:30.304" endtime="20230202 11:38:30.305"/>
+<msg timestamp="20230307 15:45:57.193" level="INFO">${header} = {'Authorization': 'Basic SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6', 'output_format': 'JSON'}</msg>
+<status status="PASS" starttime="20230307 15:45:57.190" endtime="20230307 15:45:57.193"/>
 </kw>
 <kw name="POST" library="RequestsLibrary">
 <var>${response}</var>
@@ -30,9 +30,9 @@
 <arg>headers=${header}</arg>
 <arg>data=${xml}</arg>
 <doc>Sends a POST request.</doc>
-<msg timestamp="20230202 11:38:30.447" level="INFO">POST Request : url=https://sut-test-adrian.squashcloud.io/api/carriers/ 
+<msg timestamp="20230307 15:45:57.464" level="INFO">POST Request : url=https://sut-test-adrian.squashcloud.io/api/carriers/ 
  path_url=/api/carriers/ 
- headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Basic SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6', 'output_format': 'JSON', 'Content-Length': '248'} 
+ headers={'User-Agent': 'python-requests/2.28.2', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Basic SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6', 'output_format': 'JSON', 'Content-Length': '248'} 
  body=&lt;prestashop xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
   &lt;carrier&gt;
     &lt;name&gt;test&lt;/name&gt;
@@ -45,33 +45,33 @@
 &lt;/prestashop&gt;
  
  </msg>
-<msg timestamp="20230202 11:38:30.448" level="INFO">POST Response : url=https://sut-test-adrian.squashcloud.io/api/carriers/ 
+<msg timestamp="20230307 15:45:57.464" level="INFO">POST Response : url=https://sut-test-adrian.squashcloud.io/api/carriers/ 
  status=201, reason=Created 
- headers={'Access-Time': '1675334310', 'Content-Length': '68', 'Content-Sha1': '696bddac8fc244fe344d5e07bfb391de8ecb71d4', 'Content-Type': 'application/json', 'Date': 'Thu, 02 Feb 2023 10:38:30 GMT', 'Execution-Time': '0.032', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def502002bfdb8662464ff1d60b7306c9850c7a2566d87cd25ed80fd13ef10be052a2073f36ea1a3ef65de6cdd999c803ea6316a466ed1a6c1ba0e9a2e8cb822570e74f2ec1e558a407be1a1beffebc73a3d2edb9278a0615f8993da0b08604c35db66bffe3d5948faa3d106eab148f71c3b04023ec9b5cf56a69de96fe5f13b4c15575d41b31a2eea5aedb45ef728b86c335bf79d31fb815cb27a49fac1080af9385da097e540ef9e2fac02357a4783bafbdd860b53b3a18e7be1daa27c04747d8fb5723315736770219bffc1e94b7179ce28869bee94336a; expires=Wed, 22-Feb-2023 10:38:30 GMT; Max-Age=1728000; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} 
- body={"carrier":{"id":"32","name":"test","position":5,"delay":"bla bla"}} 
+ headers={'Access-Time': '1678200357', 'Content-Length': '68', 'Content-Sha1': 'f1740246322b7e0009684ec7f6228e54e2e079f2', 'Content-Type': 'application/json', 'Date': 'Tue, 07 Mar 2023 14:45:57 GMT', 'Execution-Time': '0.019', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def50200b69609a3a2851e57608d4a40368b8403a65e61cf814f30a6574b8202d22367dd01c69680fbce6f29a3074cbe61b38534d450509d8d18b14af6ed69fecdfa8eb190eaf985cf084e528adfa38b790c31689ea9d217866a24aecc7bd56df4f1e7c4c03ef4dc3524264e8824bf3a5e100a9689844e57064c9ebeeda5b0de21ecec40a614eea79b56ef9dc3ff906712a3eb25bdc11f21c0093c120d5e728d9e2a009b10626da49a9d696d5ac33ffa8e80fc6f270f867ef9a39b4c9ba8eea7358b3e43b1580941fcfbb6105b8e53fe338e533e2aed596700; expires=Mon, 27-Mar-2023 14:45:57 GMT; Max-Age=1728000; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} 
+ body={"carrier":{"id":"35","name":"test","position":6,"delay":"bla bla"}} 
  </msg>
-<msg timestamp="20230202 11:38:30.448" level="INFO">${response} = &lt;Response [201]&gt;</msg>
-<status status="PASS" starttime="20230202 11:38:30.306" endtime="20230202 11:38:30.449"/>
+<msg timestamp="20230307 15:45:57.464" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20230307 15:45:57.193" endtime="20230307 15:45:57.464"/>
 </kw>
 <kw name="DELETE" library="RequestsLibrary">
 <arg>url=${endpoint}${URI}${response.json()}[carrier][id]</arg>
 <arg>headers=${header}</arg>
 <doc>Sends a DELETE request.</doc>
-<msg timestamp="20230202 11:38:30.559" level="INFO">DELETE Request : url=https://sut-test-adrian.squashcloud.io/api/carriers/32 
- path_url=/api/carriers/32 
- headers={'User-Agent': 'python-requests/2.28.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Basic SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6', 'output_format': 'JSON', 'Content-Length': '0'} 
+<msg timestamp="20230307 15:45:57.703" level="INFO">DELETE Request : url=https://sut-test-adrian.squashcloud.io/api/carriers/35 
+ path_url=/api/carriers/35 
+ headers={'User-Agent': 'python-requests/2.28.2', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Basic SlQxSVZXR1FINTdFMUJWTjhSSDE4TFFJQkdVWktSN1Q6', 'output_format': 'JSON', 'Content-Length': '0'} 
  body=None 
  </msg>
-<msg timestamp="20230202 11:38:30.559" level="INFO">DELETE Response : url=https://sut-test-adrian.squashcloud.io/api/carriers/32 
+<msg timestamp="20230307 15:45:57.707" level="INFO">DELETE Response : url=https://sut-test-adrian.squashcloud.io/api/carriers/35 
  status=200, reason=OK 
- headers={'Access-Time': '1675334310', 'Content-Length': '0', 'Date': 'Thu, 02 Feb 2023 10:38:30 GMT', 'Execution-Time': '0.015', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def5020031e92d923e078ddb24af748d3068586f34aa9e7b62a2dc2095940238cae24739908adce4baca4e5f355c71634cfab8c64b586fe98e2330afd28bb5d13ba1f21d6bedabfe76a7ebb51897caa311ec9a49653d900006bf5bdb5874e4190a78867f1785342fc6effad2a82e66352c969b93d94ab1a88eed396aa779d85c548683d300d2f24693ce46cc008d0521c31eff923bec8e3ce652c29ffeaf3a08de67c4799314e8791994630af07dd56f1af574516d6784473dacdb756ef7067bb8a57e582a5b1388a82d29b798ee5349fa3a29b2847489182f; expires=Wed, 22-Feb-2023 10:38:30 GMT; Max-Age=1728000; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} 
+ headers={'Access-Time': '1678200357', 'Content-Length': '0', 'Date': 'Tue, 07 Mar 2023 14:45:57 GMT', 'Execution-Time': '0.013', 'Psws-Version': '8.0.0', 'Server': 'Apache', 'Set-Cookie': 'PrestaShop-b9331fb680d9ed908d128463ae955387=def502005a34cbfa900f4e06b7c10298edc29e681d1b9797bd7c36c87c3be9c02391fafc073038233add8bc3ad40c2c01c18734532c085aad94c57351fb23e9da9e0a0a7f875303d1a012502aac84fdceb3fdaf80f1c724761771b0b358fdeb5e578e021d32a85776264251d0b65dd8a42aebbf5ec2ae7a952ad23699e54c5769d9c0785be3ea1d525a506acbcb6310b5678d2fc3852c0b8765878828bfd30a883d88930d85624d444cd4aaf7f0a5108c48d9a751490293f18b616a1acb26410352857c02e594fca0545af029b82fe7f16cd4e3f1de418ce05; expires=Mon, 27-Mar-2023 14:45:57 GMT; Max-Age=1728000; path=/; domain=sut-test-adrian.squashcloud.io; secure; HttpOnly; SameSite=Lax', 'X-Powered-By': 'PrestaShop Webservice'} 
  body=None 
  </msg>
-<status status="PASS" starttime="20230202 11:38:30.450" endtime="20230202 11:38:30.559"/>
+<status status="PASS" starttime="20230307 15:45:57.468" endtime="20230307 15:45:57.708"/>
 </kw>
-<status status="PASS" starttime="20230202 11:38:30.300" endtime="20230202 11:38:30.560"/>
+<status status="PASS" starttime="20230307 15:45:57.174" endtime="20230307 15:45:57.721"/>
 </test>
-<status status="PASS" starttime="20230202 11:38:30.092" endtime="20230202 11:38:30.564"/>
+<status status="PASS" starttime="20230307 15:45:56.745" endtime="20230307 15:45:57.731"/>
 </suite>
 <statistics>
 <total>
@@ -84,6 +84,5 @@
 </suite>
 </statistics>
 <errors>
-<msg timestamp="20230202 11:38:30.295" level="ERROR">Error in file 'c:\Users\aandre\Desktop\DepotGit\RequestLibrary\prestashop.robot' on line 4: Invalid resource file extension '.xml'. Supported extensions are '.resource', '.robot', '.txt', '.tsv', '.rst' and '.rest'.</msg>
 </errors>
 </robot>
